@@ -1,9 +1,6 @@
 package usuarios;
 
-/**
- * Datos comunes a cualquier persona que puede ingresar a la plataforma.
- * El nombre de usuario no se modifica para conservar su unicidad.
- */
+
 public abstract class Usuario {
     public enum Rol {
         CLIENTE,

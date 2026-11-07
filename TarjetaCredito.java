@@ -58,4 +58,12 @@ public class TarjetaCredito extends MedioPago{
     public void setNio(int nip) {
         this.nip = nip;
     }
+
+    public float getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(float saldo) {
+        this.saldo = saldo;
+    }
 }

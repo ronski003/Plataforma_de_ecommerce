@@ -1,9 +1,15 @@
+//import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Principal {
     static Scanner lector = new Scanner(System.in);
 
     public static void main(String[] args) { 
+        /*DecimalFormat formato = new DecimalFormat("#0.00");
+        TarjetaCredito tarjeta = new TarjetaCredito("Erika", "10012010", 2704);
+
+
+        System.out.println(formato.format(tarjeta.getSaldo()));*/ //Idea para control de decimales
         //Inicialización de todas las instancias necesarias
         int opcion = 0;
 
@@ -25,12 +31,12 @@ public class Principal {
                 System.out.println("¿Está seguro de querer abandonar el sistema?");
                 String respuesta = lector.nextLine();
 
-                if(respuesta.equalsIgnoreCase("sí") | respuesta.equalsIgnoreCase("si")) {
+                if(respuesta.equalsIgnoreCase("sí") || respuesta.equalsIgnoreCase("si")) {
+                    System.out.println("Abandonando el sitio...");
                     return;
                 }
-                else {
-                    break;
-                }
+                opcion = 0;
+                break;
             default:
                 System.out.println("Ingrese una opción válida");
                 break;

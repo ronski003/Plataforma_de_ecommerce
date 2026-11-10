@@ -1,3 +1,5 @@
+package domicilios;
+
 import java.util.Scanner;
 
 public class Domicilio {

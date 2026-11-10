@@ -1,3 +1,4 @@
+package pago;
 public class Punto extends MedioPago{
     private int saldo;
 

@@ -1,9 +1,4 @@
-
-package productos;
-import productos.Dec_Productos.Producto; 
 import BaseDatos.BaseDeDatos;
-
-import java.util.ArrayList;
 import static productos.Dec_Productos.Producto.modificarPrecio;
 import static productos.Dec_Productos.Producto.registrarProducto;
 

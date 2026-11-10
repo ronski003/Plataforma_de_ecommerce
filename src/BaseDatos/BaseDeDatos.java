@@ -1,4 +1,3 @@
-
 package BaseDatos;
 import java.util.ArrayList;
 import productos.Dec_Productos.Producto;  
@@ -20,13 +19,13 @@ public class BaseDeDatos {
     
     public void imprimirLista(){
         if(listaProductos.isEmpty()){
-            System.out.println("No hay productos en el almacen");
+            System.out.println("No hay productos en el almacén");
         }else{
             System.out.println("______________________________________");
-            System.out.println("Lista de productos del almacen");
+            System.out.println("Lista de productos del almacén");
             for(int i=0; i<listaProductos.size(); i++){
                 System.out.println("----------");
-                System.out.println("Nombre: "+listaProductos.get(i).getNombreProducto()+ "\tIdentifiscor: "+listaProductos.get(i).getIdentificadorUnico());
+                System.out.println("Nombre: "+listaProductos.get(i).getNombreProducto()+ "\tIdentificador: "+listaProductos.get(i).getIdentificadorUnico());
                 System.out.println("Precio "+listaProductos.get(i).getPrecio());
                 System.out.println("----------");
             }

@@ -1,3 +1,4 @@
+package pago;
 public abstract class MedioPago {
     private String alias; 
 

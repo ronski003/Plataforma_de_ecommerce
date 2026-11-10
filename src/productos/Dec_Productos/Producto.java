@@ -1,10 +1,7 @@
 
 package productos.Dec_Productos;
-import java.util.ArrayList;
-import java.util.Scanner;
 import BaseDatos.BaseDeDatos;
-
-
+import java.util.Scanner;
 
 public class Producto {
     private String nombreProducto;
@@ -41,8 +38,8 @@ public class Producto {
                 }
 
             }else{
-                System.out.println("No se ha insertado un precio valido");
-                System.out.println("Vuelvalo a intentar");
+                System.out.println("No se ha insertado un precio válido");
+                System.out.println("Vuélvalo a intentar");
                 System.out.println("------");
                 lector.next();
                 validador = false;
@@ -74,7 +71,7 @@ public class Producto {
             precio = registrarPrecio(base, nombreProduct); 
 
             //Se registra la categoria
-            System.out.println("Ingrese la categoria");
+            System.out.println("Ingrese la categoría");
             Categoria= lector.nextLine();     
 
             //Se registra el identificador del producto
@@ -94,8 +91,8 @@ public class Producto {
                     identificador = id;
                     System.out.println("Identificador único almacenado con éxito");
                 }else{
-                    System.out.println("No se ha insertado un identificador valido");
-                    System.out.println("Vuelvalo a intentar");
+                    System.out.println("No se ha insertado un identificador válido");
+                    System.out.println("Vuélvalo a intentar");
                     lector.next();
                 }
                 lector.nextLine();
@@ -106,7 +103,7 @@ public class Producto {
 
             System.out.println("____________________________________________________");
             System.out.println("¿Desea salir o agregar otro producto?");
-            System.out.println("En caso de querer agregar otro producto teclee cualquier digito excepto 1");
+            System.out.println("En caso de querer agregar otro producto teclee cualquier dígito excepto 1");
 
             salir = lector.nextLine();
 
@@ -139,11 +136,11 @@ public class Producto {
                         System.out.println("Se ha encontrado el producto"); 
                         precio=registrarPrecio(base, base.getListaProductos().get(i).getNombreProducto());
                         base.getListaProductos().get(i).setPrecio(precio);
-                        System.out.println("Se a modificado el precio correctamente");
+                        System.out.println("Se ha modificado el precio correctamente");
                         break; 
                     }
                     if(i+1>=base.getListaProductos().size()){
-                        System.out.println("No se ha encontrado el producto, intentelo con otra clave");
+                        System.out.println("No se ha encontrado el producto, inténtelo con otra clave");
                         System.out.println("-----------------------------------------------------------");
                         System.out.println("");
                     }
@@ -209,5 +206,3 @@ public class Producto {
     
    
 }
-
-  

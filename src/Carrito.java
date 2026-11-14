@@ -20,7 +20,7 @@ public class Carrito {
     public Carrito() {
     }
     
-    public void AgregarCarrito(){
+     public void AgregarCarrito(){
         
         Scanner lector = new Scanner(System.in);
         String temporal; 
@@ -35,9 +35,9 @@ public class Carrito {
                 boolean validador=true; 
                 temporal = lector.nextLine();
                 temporal =temporal.trim().toUpperCase(); 
-                for(i=0; i<carrito.size(); i++){
-                    String nombre = carrito.get(i).getNombreProducto().toUpperCase().trim(); 
-                    String id =String.valueOf(carrito.get(i).getIdentificadorUnico());
+                for(i=0; i<BD.getListaProductos().size(); i++){
+                    String nombre = BD.getListaProductos().get(i).getNombreProducto().toUpperCase().trim(); 
+                    String id =String.valueOf(BD.getListaProductos().get(i).getIdentificadorUnico());
                     id = id.trim().toUpperCase(); 
                     if( temporal.equals(nombre) || temporal.equals(id)){
                         while(validador){
@@ -50,7 +50,7 @@ public class Carrito {
                                 lector.next();
                             }else{
                                 int cantidad = lector.nextInt(); 
-                                Producto temp = carrito.get(i); 
+                                Producto temp = BD.getListaProductos().get(i); 
                                 if(cantidad>0){
                                     temp.setStock(cantidad);
                                     carrito.add(temp);
@@ -68,7 +68,7 @@ public class Carrito {
                 }
                 
 
-                if(i >=carrito.size()){
+                if(i >=BD.getListaProductos().size()){
                     System.out.println("Error 404, no se encontro el producto solicitado");
                     System.out.println("");  
                     opcion=false; 

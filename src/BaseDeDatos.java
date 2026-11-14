@@ -114,22 +114,19 @@ public class BaseDeDatos{
                 if(validadorTemp == true){
                     long id = lector.nextLong(); 
                     for(int i =0; i<this.listaProductos.size(); i++){ //Se investiga si el identificador ya fue usado 
-                        if(this.listaProductos.get(i).equals(id)){
-                            System.out.println("El identificador único ingresado se ha encontrado en otro producto");
+                       long idr= this.listaProductos.get(i).getIdentificadorUnico();
+                        if(idr ==id){
+                            System.out.println("El identificador único ingresado se ha encontrado en otro producto o no es valido");
                             System.out.println("Escriba otro nuevamente");
                             System.out.println("-----");
-                            validadorTemp=false; 
+                            validadorTemp=false;
                             break; 
                         }
                     }
-                    if(id > 0){
+                    if(id > 0 && validadorTemp==true){
                        identificador = id;
                         System.out.println("Identificador único almacenado con éxito"); 
-                    }else{
-                        System.out.println("El identificador no puede ser negativo o cero");
-                        System.out.println("Intentelo de nuevo");
                         System.out.println("-----");
-                        validadorTemp=false; 
                     }
                     
                 }else{
@@ -162,6 +159,7 @@ public class BaseDeDatos{
         long id = 0L; 
         float precio=0f; 
         Scanner lector = new Scanner(System.in); 
+        
         System.out.println("\t *** Modificador de precio ***");
         //Se imprime la lista de productos
         this.imprimirLista();
@@ -177,6 +175,7 @@ public class BaseDeDatos{
                         precio=registrarPrecio(this.listaProductos.get(i).getNombreProducto());
                        this.listaProductos.get(i).setPrecio(precio);
                         System.out.println("Se a modificado el precio correctamente");
+                        System.out.println("Producto: "+this.getListaProductos().get(i).getNombreProducto()+ "\tPrecio: "+this.getListaProductos().get(i).getPrecio());
                         break; 
                     }
                     if(i+1>=this.listaProductos.size()){
@@ -184,17 +183,34 @@ public class BaseDeDatos{
                         System.out.println("-----------------------------------------------------------");
                         System.out.println("");
                         validador=false;
-                       
+                                              
                     }
                 }
             }else{
                 System.out.println("Identificardor invalido vuelvalo a intentar");
                 System.out.println("");
+                lector.nextLine();
             }
-        }while(validador = false);    
+        }while(validador == false);    
     } 
-}
+
+    public ArrayList<Producto> getListaProductos() {
+        return listaProductos;
+    }
+
+    public void setListaProductos(ArrayList<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
+    }
     
+    
+}
+
+    
+    
+    
+    
+
+
     
     
     

@@ -9,7 +9,7 @@ public class BaseDeDatos {
     private ArrayList<Producto> listaProductos = new ArrayList<>(); 
     
     public BaseDeDatos(){
-        System.out.println("Se ha inicializado la base de datos...");
+        System.out.println("\nSe ha inicializado la base de datos...");
     }
     
     public void  AgregarProducto(Producto producto){

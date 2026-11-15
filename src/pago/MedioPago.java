@@ -1,4 +1,7 @@
 package pago;
+
+import java.text.DecimalFormat;
+
 public abstract class MedioPago {
     private String alias; 
 
@@ -7,7 +10,8 @@ public abstract class MedioPago {
     }
 
     public void procesarPago(float monto) {
-        System.out.println("Se debe pagar $"+monto);
+        DecimalFormat formato = new DecimalFormat("#0.00");
+        System.out.println("Se debe pagar $"+formato.format(monto));
     }
 
     public String getAlias() {

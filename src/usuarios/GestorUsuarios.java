@@ -9,6 +9,10 @@ import java.util.Map;
 public class GestorUsuarios {
     private final Map<String, Usuario> usuarios = new LinkedHashMap<>();
 
+    public GestorUsuarios() {
+        cargarDatosIniciales();
+    }
+
     public boolean registrarCliente(String nombreUsuario, String nombreCompleto) {
         return agregarUsuario(new Cliente(nombreUsuario, nombreCompleto));
     }

@@ -22,7 +22,7 @@ public class Producto {
         float precio = 0f; 
         boolean validador; 
         do{
-            System.out.println("Ingresa el precio del producto");
+            System.out.println("\nIngresa el precio del producto");
             validador = lector.hasNextFloat();
 
             if(validador == true){
@@ -30,7 +30,7 @@ public class Producto {
                 precio = lector.nextFloat();
 
                 if(precio <= 0){
-                    System.out.println("ERROR");
+                    System.out.println("\nERROR");
                     System.out.println("Se ha detectado que al producto " + nombreProduct + " se le ha dado un precio menor o igual a cero");
                     System.out.println("Se solicita que coloque un precio mayor a cero");
                     System.out.println("----");
@@ -38,7 +38,7 @@ public class Producto {
                 }
 
             }else{
-                System.out.println("No se ha insertado un precio válido");
+                System.out.println("\nNo se ha insertado un precio válido");
                 System.out.println("Vuélvalo a intentar");
                 System.out.println("------");
                 lector.next();
@@ -65,18 +65,18 @@ public class Producto {
        //Desarrollo de la funcion
         while(validadorSalida == true){
 
-            System.out.println("Ingresa el nombre del producto");
+            System.out.print("\nIngresa el nombre del producto: ");
             nombreProduct = lector.nextLine();
 
             precio = registrarPrecio(base, nombreProduct); 
 
             //Se registra la categoria
-            System.out.println("Ingrese la categoría");
+            System.out.print("Ingrese la categoría: ");
             Categoria= lector.nextLine();     
 
             //Se registra el identificador del producto
             do{
-                System.out.println("Ingresa el identificador del producto");
+                System.out.print("Ingresa el identificador del producto: ");
                 validadorTemp = lector.hasNextLong();
                 if(validadorTemp == true){
                     long id = lector.nextLong(); 

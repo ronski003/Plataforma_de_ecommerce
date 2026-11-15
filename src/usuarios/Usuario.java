@@ -17,7 +17,7 @@ public abstract class Usuario {
 
     private static String validarTexto(String texto, String campo) {
         if (texto == null || texto.isBlank()) {
-            throw new IllegalArgumentException(campo + " no puede estar vacio.");
+            throw new IllegalArgumentException(campo + " no puede estar vacío.");
         }
         return texto.trim();
     }

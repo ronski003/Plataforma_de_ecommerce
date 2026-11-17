@@ -119,6 +119,7 @@ public class Principal {
                 Pedido pedido = new Pedido(cliente, carrito);
 
                 String continuar = pedido.confirmoPedido() ? "Gracias por su compra":"Realice lo indicado e intenté nuevamente";
+                System.out.println(continuar);
                 break;
             case 5:
                 carrito.VaciarCarrito();
@@ -201,10 +202,10 @@ public class Principal {
                 String correo = lector.nextLine();
 
                 System.out.print("Contraseña: ");
-                int contrasena = lector.nextInt();
-                lector.nextLine();
+                String contrasena = lector.nextLine();
 
                 PayPal paypal = new PayPal(alias, correo);
+                paypal.setContrasena(contrasena);
                 cliente.agregarMedioPago(paypal);
                 break;
             default:
@@ -216,28 +217,27 @@ public class Principal {
 
     public static void registrarDomicilio() {
         Cliente cliente = (Cliente) usuario;
-
-                if(cliente.getDomicilios().isEmpty()) {
-                System.out.println("\n-----DOMICILIOS-----");
-                System.out.print("Colonia: ");
-                String colonia = lector.nextLine();
-                System.out.print("Calle: ");
-                String calle = lector.nextLine();
-                System.out.print("Teléfono: ");
-                String telefono = lector.nextLine();
-
-                Domicilio domicilio = new Domicilio(colonia, calle, telefono);
-                cliente.agregarDomicilio(domicilio);
-                }
-                else {
-                    System.out.println("Ya cuenta con domicilios registrados");
-                    System.out.println("¿Desea agregar un nuevo domicilio?");
-                    String respuesta = lector.nextLine();
-
-                    if(respuesta.equalsIgnoreCase("sí") || respuesta.equalsIgnoreCase("si")) {
-                        registrarDomicilio();
-                    }
-                }
+        boolean salir = true;
+        System.out.println("\n-----DOMICILIOS-----");
+        while(salir) {
+            System.out.print("Colonia: ");
+            String colonia = lector.nextLine();
+            System.out.print("Calle: ");
+            String calle = lector.nextLine();
+            System.out.print("Teléfono: ");
+            String telefono = lector.nextLine();
+            
+            Domicilio domicilio = new Domicilio(colonia, calle, telefono);
+            cliente.agregarDomicilio(domicilio);
+                
+            System.out.println("¿Desea agregar un nuevo domicilio?");
+            String respuesta = lector.nextLine();
+            System.out.println("\n");
+            if(!respuesta.equalsIgnoreCase("sí") && !respuesta.equalsIgnoreCase("si")) {
+                salir = false;
+                
+            }
+        }
     }
 
 }

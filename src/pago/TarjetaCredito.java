@@ -1,4 +1,5 @@
 package pago;
+import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -14,36 +15,66 @@ public class TarjetaCredito extends MedioPago{
         this.nip = nip;
 
         Random aleatorio = new Random();
-        this.saldo = aleatorio.nextFloat(100.0f, 1001.0f);
+        this.saldo = aleatorio.nextFloat(30000.0f, 80001.0f);
 
-        this.punto = new Punto(alias, this.saldo);
+        this.punto = new Punto(this.saldo);
     }
 
     @Override 
-    public void procesarPago(float monto) {
+    public boolean procesarPago(float monto) {
+        DecimalFormat formato = new DecimalFormat("#0.00");
         Scanner lector = new Scanner(System.in);
-
         System.out.print("Ingrese el NIP: ");
         int nip = lector.nextInt();
 
-        if(nip == this.getNip())
-        {
+        if(nip != this.getNip()) {
+            System.out.println("NIP incorrecto");
+            return false;
+        }
+        
+        System.out.println("1. Saldo de la tarjeta");
+        System.out.println("2. Puntos acumulados");
+        System.out.println("Seleccione el método de pago: ");
+        int opcion = lector.nextInt();
+
+        
+        if(opcion == 2) {
             super.procesarPago(monto);
-            if(this.saldo >= monto)
-            {
-                System.out.println("Se ha realizado el pago");
-                this.saldo -= monto;
-                punto.acumulacionPunto(monto);
-            }
-            else{
-                System.out.println("Fondos insuficientes");
+            
+            return punto.procesarPago(monto);
+        }
+        System.out.println("Saldo: $"+formato.format(this.getSaldo()));
+        super.procesarPago(monto);
+        if(this.saldo >= monto)
+        {
+            System.out.println("Se ha realizado el pago");
+            this.saldo -= monto;
+            punto.acumulacionPunto(monto);
+            return true;
+        }
+        else{
+            System.out.println("Fondos insuficientes");
+            return false;
                 
-            }
+        }
+        
+    }
+
+    @Override
+    public void mostrarInformacion() {
+        DecimalFormat formato = new DecimalFormat("#0.00");
+        String ultimos;
+        if(this.getNumTarjeta().length() >= 4) {
+            ultimos = this.getNumTarjeta().substring(this.numTarjeta.length()-4);
         }
         else {
-            System.out.println("El pago fue rechazado");
+            ultimos = this.getNumTarjeta();
         }
-    }
+        System.out.println("Alias: " + getAlias());
+        System.out.println("Tarjeta: **** **** ****" + ultimos);
+        System.out.println("Saldo: $" + formato.format(this.getSaldo()));
+        System.out.println("Puntos acumulados: "+punto.getSaldo());
+    }   
 
     public String getNumTarjeta() {
         return numTarjeta;

@@ -17,6 +17,7 @@ public class BaseDeDatos{
     //Se vuelve privado el metodo constructor de base de datos 
     private BaseDeDatos(){
         this.listaProductos = new ArrayList<>();
+        cargaProductos();
         System.out.println("Se ha inicializado la base de datos...");
     }
     
@@ -40,7 +41,7 @@ public class BaseDeDatos{
             for(int i=0; i<this.listaProductos.size(); i++){
                 System.out.println("----------");
                 System.out.println("Nombre: "+this.listaProductos.get(i).getNombreProducto()+ "\tIdentificador: "+this.listaProductos.get(i).getIdentificadorUnico());
-                System.out.println("Precio "+this.listaProductos.get(i).getPrecio());
+                System.out.println("Precio $"+this.listaProductos.get(i).getPrecio());
                 System.out.println("----------");
             }
         }
@@ -70,7 +71,7 @@ public class BaseDeDatos{
 
             }else{
                 System.out.println("No se ha insertado un precio válido");
-                System.out.println("Vuelvalo a intentar");
+                System.out.println("Vuélvalo a intentar");
                 System.out.println("------");
                 lector.next();
                 validador = false;
@@ -130,7 +131,7 @@ public class BaseDeDatos{
                     
                 }else{
                     System.out.println("No se ha insertado un identificador valido");
-                    System.out.println("Vuelvalo a intentar");
+                    System.out.println("Vuélvalo a intentar");
                     lector.next();
                 }
                 lector.nextLine();
@@ -180,7 +181,7 @@ public class BaseDeDatos{
                         precio=registrarPrecio(this.listaProductos.get(i).getNombreProducto());
                        this.listaProductos.get(i).setPrecio(precio);
                         System.out.println("Se ha modificado el precio correctamente");
-                        System.out.println("Producto: "+this.getListaProductos().get(i).getNombreProducto()+ "\tPrecio: "+this.getListaProductos().get(i).getPrecio());
+                        System.out.println("Producto: "+this.getListaProductos().get(i).getNombreProducto()+ "\tPrecio: $"+this.getListaProductos().get(i).getPrecio());
                         break; 
                     }
                     if(i+1>=this.listaProductos.size()){
@@ -199,6 +200,35 @@ public class BaseDeDatos{
         }while(validador == false);    
         
     } 
+
+    private void cargaProductos() {
+        listaProductos.add(new Producto("Laptop Lenovo", 14999.99f, "Computación", 1000000001));
+        listaProductos.add(new Producto("Mouse Inalámbrico", 349.99f, "Computación", 1000000002));
+        listaProductos.add(new Producto("Teclado Mecánico", 899.99f, "Computación", 1000000003));
+        listaProductos.add(new Producto("Monitor 24 Pulgadas", 3299.99f, "Computación", 1000000004));
+
+        listaProductos.add(new Producto("Audífonos Bluetooth", 799.99f, "Audio", 1000000005));
+        listaProductos.add(new Producto("Bocina Portátil", 1199.99f, "Audio", 1000000006));
+        listaProductos.add(new Producto("Micrófono USB", 699.99f, "Audio", 1000000007));
+
+        listaProductos.add(new Producto("Smartphone Samsung", 8999.99f, "Telefonía", 1000000008));
+        listaProductos.add(new Producto("Cargador USB-C", 249.99f, "Telefonía", 1000000009));
+        listaProductos.add(new Producto("Power Bank 10000mAh", 599.99f, "Telefonía", 1000000010));
+
+        listaProductos.add(new Producto("Playera Negra", 299.99f, "Ropa", 1000000011));
+        listaProductos.add(new Producto("Jeans Azul", 699.99f, "Ropa", 1000000012));
+        listaProductos.add(new Producto("Sudadera Gris", 849.99f, "Ropa", 1000000013));
+
+        listaProductos.add(new Producto("Cafetera", 1499.99f, "Hogar", 1000000014));
+        listaProductos.add(new Producto("Licuadora", 1199.99f, "Hogar", 1000000015));
+        listaProductos.add(new Producto("Sartén Antiadherente", 549.99f, "Hogar", 1000000016));
+
+        listaProductos.add(new Producto("Balón de Fútbol", 399.99f, "Deportes", 1000000017));
+        listaProductos.add(new Producto("Mancuernas 5kg", 799.99f, "Deportes", 1000000018));
+
+        listaProductos.add(new Producto("Mochila Escolar", 649.99f, "Accesorios", 1000000019));
+        listaProductos.add(new Producto("Reloj Digital", 1299.99f, "Accesorios", 1000000020));
+}
 
     public ArrayList<Producto> getListaProductos() {
         return listaProductos;

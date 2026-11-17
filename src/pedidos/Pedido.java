@@ -1,14 +1,15 @@
 package pedidos;
 
+import domicilios.Domicilio;
 import java.io.FileWriter;
 import java.io.IOException;
-import domicilios.Domicilio;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Scanner;
+import pago.MedioPago;
 import productos.Carrito;
 import usuarios.Cliente;
-import java.util.Scanner;
-import java.time.LocalTime;
-import java.time.LocalDate;
-import pago.MedioPago;
 
 public class Pedido {
     private Cliente cliente;
@@ -23,7 +24,8 @@ public class Pedido {
 
     public boolean confirmoPedido() {
         Scanner lector = new Scanner(System.in);
-        if(this.carrito == null){
+        System.out.println("\n");
+        if(this.carrito.getCarrito().isEmpty()){
            System.out.println("No se puede procesar el pago, dado que el carrito está vacío ");
            return false; 
        }
@@ -46,49 +48,69 @@ public class Pedido {
             System.out.println(domicilio.getColonia());
             System.out.println(domicilio.getCalle());
             System.out.println(domicilio.getTelefono());
+            System.out.println("----------------------------------");
             i++;
        }
-       
+       System.out.print("Indique su opción: ");
        int opcion = lector.nextInt();
+       System.out.println("\n");
+       Domicilio domicilio = cliente.getDomicilios().get(opcion-1);
 
        System.out.println("Seleccione un medio de pago para envío");
        for(int i = 0; i<cliente.getPagos().size(); i++) {
-            System.out.println(i+". ");
-            System.out.println(cliente.getDomicilios().);
-            System.out.println(domicilio.getCalle());
-            System.out.println(domicilio.getTelefo)
+            System.out.println((i+1)+". ");
+            cliente.getPagos().get(i).mostrarInformacion();
+            System.out.println("----------------------------------");
        }
+       System.out.print("Indique su ocpión: ");
+       int opcion2 = lector.nextInt();
+       System.out.println("\n");
 
-       GuardarArchivo(cliente.getNombreCompleto());
+       MedioPago medio = cliente.getPagos().get(opcion2 -1);
+
+       float total = 0;
+
+       for(int i = 0; i < carrito.getCarrito().size(); i++) {
+            total += carrito.getCarrito().get(i).getPrecio() * carrito.getCarrito().get(i).getStock();
+        }
+       boolean aceptado = medio.procesarPago(total);
+
+       if(!aceptado) {
+            System.out.println("No es posible completar el pedido");
+            return false; 
+       }
+       
+       GuardarArchivo(domicilio, medio);
        
        return true; 
     }
 
-    public void GuardarArchivo(String Nombre ){
-       String nombreArchivo ="Pedido de "+Nombre+ ".txt";
-        
-        
+    public void GuardarArchivo (Domicilio domicilio, MedioPago medio){
+        DecimalFormat formato = new DecimalFormat("#0.00");
+        String nombreArchivo ="Pedido de "+cliente.getNombreCompleto().trim()+ ".txt";
+    
         try {
             FileWriter archivo = new FileWriter(nombreArchivo);
             float suma=0; 
-            archivo.write("\t\tPedido");
+            archivo.write("\t\tPEDIDO\n");
             archivo.write("-------------------------------------------------------------\n");
-            for(int i=0; i<carrito.size(); i++){
-                String documento = "Producto: "+carrito.get(i).getNombreProducto()+ "\tUnidades: "+carrito.get(i).getStock(); 
-                suma += carrito.get(i).getPrecio() * carrito.get(i).getStock(); 
+            for(int i=0; i<carrito.getCarrito().size(); i++){
+
+                String documento = "Producto: "+carrito.getCarrito().get(i).getNombreProducto()+ "\tUnidades: "+carrito.getCarrito().get(i).getStock(); 
+                suma += carrito.getCarrito().get(i).getPrecio() * carrito.getCarrito().get(i).getStock(); 
                 archivo.write(documento+"\n"); 
             }
-            archivo.write("Monto total: "+suma+"\n");
-            archivo.write("Domicilio : ' +   Aqui iría el domicio +'   \n");
-            archivo.write("Medio de Pago: '+Aqui iriía el medio de pago+'    \n    ");
+            archivo.write("Monto total: $"+formato.format(suma)+"\n");
+            archivo.write("Domicilio :"+domicilio.getColonia()+", "+domicilio.getCalle()+"\n");
+            archivo.write("Medio de Pago: "+medio.getAlias()+"\n");
             archivo.write("-------------------------------------------------------------\n");
             archivo.close();
-            carrito.clear(); 
+            carrito.getCarrito().clear(); 
              
         } catch (IOException e) {
             System.out.println("Error 501, no se pudo registrar el pedido");
         }
-   }
+     }
 
     public Cliente getCliente() {
         return cliente;

@@ -9,10 +9,13 @@ public abstract class MedioPago {
         this.alias = alias;
     }
 
-    public void procesarPago(float monto) {
+    public boolean procesarPago(float monto) {
         DecimalFormat formato = new DecimalFormat("#0.00");
         System.out.println("Se debe pagar $"+formato.format(monto));
+        return true;
     }
+
+    public abstract void mostrarInformacion();   
 
     public String getAlias() {
         return alias;

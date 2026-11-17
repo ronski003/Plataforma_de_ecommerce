@@ -122,6 +122,10 @@ public class Carrito {
             }
         }
     }
+
+    public ArrayList<Producto> getCarrito() {
+        return carrito;
+    }
    
 //Si desean pueden ocupaar esta funcion para crear el archivo, o copiarla en usuario, o igual no usarla  
 

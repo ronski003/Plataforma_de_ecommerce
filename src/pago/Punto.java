@@ -1,9 +1,8 @@
 package pago;
-public class Punto extends MedioPago{
+public class Punto{
     private int saldo;
 
-    public Punto(String alias, float saldoTarjeta) {
-        super(alias);
+    public Punto(float saldoTarjeta) {
         this.saldo = (int) saldoTarjeta/10;
     }
 
@@ -14,22 +13,21 @@ public class Punto extends MedioPago{
         System.out.println("Total de puntos: "+this.getSaldo()+" puntos");
     }
 
-    @Override 
-    public void procesarPago(float monto) {
+    public boolean procesarPago(float monto) {
         int valorPuntos = puntosEfectivo(this.saldo);
-        
+        System.out.println("Puntos acumulados: "+this.getSaldo()+" puntos");
 
         if(valorPuntos >= monto)
         {
-            super.procesarPago(monto);
-
             int valorMonto = (int) monto*10;
             this.saldo -= valorMonto;
 
             System.out.println("Saldo de puntos: "+this.getSaldo());
+            return true;
         }
         else {
-            System.out.println("No es posible realizar el pago. Intente con otro medio de pago.");
+            System.out.println("No es posible realizar el pago. Puntos insuficientes.");
+            return false;
         }
     }
 

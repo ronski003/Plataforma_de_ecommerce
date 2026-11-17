@@ -1,4 +1,5 @@
 package pago;
+import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -12,7 +13,7 @@ public class PayPal extends MedioPago{
         this.correo = correo;
 
         Random aleatorio = new Random();
-        this.saldo = aleatorio.nextFloat(100.0f, 2001.0f);
+        this.saldo = aleatorio.nextFloat(30000.0f, 80001.0f);
     }
 
     private boolean centralPaypal() {
@@ -23,35 +24,49 @@ public class PayPal extends MedioPago{
     }
     
     @Override 
-    public void procesarPago(float monto) {
+    public boolean procesarPago(float monto) {
+        DecimalFormat formato = new DecimalFormat("#0.00");
         Scanner lector = new Scanner(System.in);
 
-        System.out.println("Ingrese el correo: ");
-        String correoIngreso = lector.nextLine();
+        System.out.println("Correo registrado: "+this.getCorreo());
+        System.out.print("Ingrese la contraseña del correo: ");
+        String contrasenaIngreso = lector.nextLine();
 
-        if(correoIngreso.equals(correo)) {
+        if(contrasenaIngreso.equals(this.getContrasena())) {
             boolean validacion = centralPaypal();
             if(validacion)
             {
+                System.out.println("Saldo: $"+formato.format(this.getSaldo()));
                 super.procesarPago(monto);
                 if(this.saldo >= monto)
                 {
                     System.out.println("Se ha realizado el pago");
                     this.saldo -= monto;
+                    return true;
                 }
                 else {
-                System.out.println("Fondos insuficientes. Intente otro medio de pago");
+                    System.out.println("Fondos insuficientes. Intente otro medio de pago");
+                    return false;
                 }
             }
             else{
-                System.out.println("Paypal rechazó el pago. Intente otro medio de pago");
+                System.out.println("Paypal rechazó el pago. No se pudo establecer conexión con la central. Intente otor medio de pago");
+                return false;
             }
         }
         else {
             System.out.println("El correo ingresado no coincide con la cuenta. El pago fue recha");
+            return false;
         }
     }
 
+    @Override
+    public void mostrarInformacion() {
+        DecimalFormat formato = new DecimalFormat("#0.00");
+        System.out.println("Alias: " + getAlias());
+        System.out.println("Correo: " + correo);
+        System.out.println("Saldo: $"+formato.format(this.getSaldo()));
+}
     public String getCorreo() {
         return correo;
     }
@@ -66,5 +81,13 @@ public class PayPal extends MedioPago{
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+     public float getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(float saldo) {
+        this.saldo = saldo;
     }
 }

@@ -19,15 +19,14 @@ public class Cliente extends Usuario {
         return Rol.CLIENTE;
     }
 
-    public void agregarDomicilio(Domicilio domicilio) {
-        if(!domicilios.equals(domicilio))
+    public void agregarDomicilio(Domicilio domicilioNuevo) {
+        if(!this.getDomicilios().equals(domicilioNuevo))
         {
-            this.getDomicilios().add(domicilio);
+            this.getDomicilios().add(domicilioNuevo);
         }
         else {
             System.out.print("Domicilio ya registrado");
         }
-        this.getDomicilios().add(domicilio);
     }
 
     public ArrayList<Domicilio> getDomicilios() {
@@ -39,7 +38,7 @@ public class Cliente extends Usuario {
     }
 
     public void agregarMedioPago(MedioPago medio) {
-        if(!medio.equals(medio)) {
+        if(!this.getPagos().contains(medio)) {
         this.getPagos().add(medio);
         }
         else {

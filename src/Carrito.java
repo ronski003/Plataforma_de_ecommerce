@@ -29,8 +29,8 @@ public class Carrito {
                
         BD.imprimirLista();
         int i; 
-         boolean validador=true;
-       
+        boolean validador=true;
+        boolean busqueda = false; 
         do{
             System.out.println("Seleccione el elemento que desea agregar al carrito, ya sea escribiendo su identificador único o su nombre");
             do{
@@ -52,17 +52,33 @@ public class Carrito {
                                 System.out.println("Recuerda que solo se pueden valores enteros");
                                 lector.nextLine(); 
                                 System.out.println("-----");
-
+                                
                             }else{
                                 int cantidad = lector.nextInt(); 
+                                boolean bandera = true; 
                                 Producto temp = BD.getListaProductos().get(i); 
                                 if(cantidad>0){
-                                    temp.setStock(cantidad);
-                                    carrito.add(temp);
-                                    System.out.println("El producto "+temp.getNombreProducto()+ " ha sido agregado correctamente a tu carrito");
-                                    this.imprimirCarrito();
-                                    System.out.println("");
-
+                                    for(int j  = 0; j<carrito.size(); j++){
+                                        String name = carrito.get(j).getNombreProducto().trim().toUpperCase();
+                                        String idx = String.valueOf(carrito.get(j).getIdentificadorUnico());
+                                    
+                                        if(nombre.equals(name) || id.equals(idx)){
+                                            cantidad += carrito.get(j).getStock(); 
+                                            temp.setStock(cantidad);
+                                            System.out.println("Se ha actualizado las unidades del producto  "+temp.getNombreProducto()+ " en tu carrito");
+                                            this.imprimirCarrito();
+                                            System.out.println("");
+                                            bandera = false;
+                                            break; 
+                                        }
+                                    }
+                                    if(bandera){
+                                        temp.setStock(cantidad);                                        
+                                        carrito.add(temp);
+                                        System.out.println("El producto "+temp.getNombreProducto()+ " ha sido agregado correctamente a tu carrito");
+                                        this.imprimirCarrito();
+                                        System.out.println("");
+                                    }
                                 }else{
                                     System.out.println("No puedes digitar cantidades menores o iguales a cero");
                                     System.out.println("Intentelo de nuevo");
@@ -71,12 +87,14 @@ public class Carrito {
                                 }
                             }
                         }while(validador==false);
+                        busqueda =true; 
                     }else{
-                        if(BD.getListaProductos().size() <1+i)
+                        if(!busqueda)
                         System.out.println("Error 404, no se encontro el producto solicitado");
                         System.out.println("------");
                         System.out.println("Escriba el nombre o identificador del producto por favor");
                         System.out.println("");  
+                        busqueda=false; 
                         validador=false; 
                         
                     }
@@ -96,8 +114,7 @@ public class Carrito {
         System.out.println("____________________________________________________");
     }while(opcion != false);
         
-    }
-    
+}   
     public void VaciarCarrito(){
         carrito.clear();    
     }

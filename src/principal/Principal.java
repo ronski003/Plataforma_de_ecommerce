@@ -1,15 +1,20 @@
 package principal;
 //import java.text.DecimalFormat;
 import BaseDatos.BaseDeDatos;
+import domicilios.Domicilio;
 import java.util.Scanner;
-import static productos.Dec_Productos.Producto.modificarPrecio;
-import static productos.Dec_Productos.Producto.registrarProducto;
+import pago.PayPal;
+import pago.TarjetaCredito;
+import pedidos.Pedido;
+import productos.Carrito;
 import usuarios.*;
 
 public class Principal {
+    static BaseDeDatos bd = BaseDeDatos.getBaseDatos();
     static Scanner lector = new Scanner(System.in);
     static GestorUsuarios gestor = new GestorUsuarios();
-    static BaseDeDatos baseDatos = new BaseDeDatos();
+    static Usuario usuario;
+    static Carrito carrito = new Carrito();
 
     public static void main(String[] args) { 
         /*DecimalFormat formato = new DecimalFormat("#0.00");
@@ -34,7 +39,7 @@ public class Principal {
                 System.out.print("\nProporcione el nombre de usuario: ");
                 String nombre = lector.nextLine();
 
-                Usuario usuario = gestor.ingresar(nombre);
+                usuario = gestor.ingresar(nombre);
 
                 if(usuario != null) {
                     System.out.println("Bienvienido "+usuario.getNombreCompleto());
@@ -60,8 +65,9 @@ public class Principal {
 
                 if(gestor.registrarCliente(nombre, nombreCompleto)) {
                     System.out.println("Usuario registrado");
-                }
+                } else {
                 System.out.println("No es posible registrar el usuario. Se ha detectado una coincidencia en el sistema");
+                }
                 break;
             case 3:
                 System.out.println("¿Está seguro de querer abandonar el sistema?");
@@ -100,20 +106,28 @@ public class Principal {
 
         switch(opcion) {
             case 1:
-
+                carrito.AgregarCarrito();
                 break;
             case 2:
+                registrarDomicilio();
                 break;
             case 3:
-                System.out.println("Indique el medio de pago que desee registrar");
+                registroPago();
                 break;
             case 4:
+                Cliente cliente = (Cliente) usuario;
+                Pedido pedido = new Pedido(cliente, carrito);
+
+                String continuar = pedido.confirmoPedido() ? "Gracias por su compra":"Realice lo indicado e intenté nuevamente";
                 break;
             case 5:
+                carrito.VaciarCarrito();
                 break;
             case 6:
+                carrito.imprimirCarrito();
                 break;
             case 7:
+
                 break;
             case 8:
                 System.out.println("Regresando...");
@@ -139,10 +153,10 @@ public class Principal {
 
         switch(opcion) {
             case 1:
-                registrarProducto(baseDatos);
+                bd.registrarProducto();
                 break;
             case 2:
-                modificarPrecio(baseDatos);
+                bd.modificarPrecio();
                 break;
             case 3:
                 System.out.println("Regresando...");
@@ -155,6 +169,75 @@ public class Principal {
     }
 
     public static void registroPago() {
-        
+        Cliente cliente = (Cliente) usuario;
+
+        System.out.println("\nMEDIO DE PAGO");
+        System.out.println("1. Tarjeta de crédito");
+        System.out.println("2. PayPal");
+        System.out.print("Indique el medio de pago: ");
+        int opcion = lector.nextInt();
+        lector.nextLine();
+
+        switch(opcion) {
+            case 1: 
+                System.out.print("Alias: ");
+                String alias = lector.nextLine(); 
+
+                System.out.print("Número de tarjeta: ");
+                String numero = lector.nextLine();
+
+                System.out.print("NIP: ");
+                int nip = lector.nextInt();
+                lector.nextLine();
+
+                TarjetaCredito tarjeta = new TarjetaCredito(alias, numero, nip);   
+                cliente.agregarMedioPago(tarjeta);
+                break;
+            case 2:
+                System.out.print("Alias: ");
+                alias = lector.nextLine(); 
+
+                System.out.print("Correo: ");
+                String correo = lector.nextLine();
+
+                System.out.print("Contraseña: ");
+                int contrasena = lector.nextInt();
+                lector.nextLine();
+
+                PayPal paypal = new PayPal(alias, correo);
+                cliente.agregarMedioPago(paypal);
+                break;
+            default:
+                System.out.println("Opción no válida");
+                break;
+        }
+    
     }
+
+    public static void registrarDomicilio() {
+        Cliente cliente = (Cliente) usuario;
+
+                if(cliente.getDomicilios().isEmpty()) {
+                System.out.println("\n-----DOMICILIOS-----");
+                System.out.print("Colonia: ");
+                String colonia = lector.nextLine();
+                System.out.print("Calle: ");
+                String calle = lector.nextLine();
+                System.out.print("Teléfono: ");
+                String telefono = lector.nextLine();
+
+                Domicilio domicilio = new Domicilio(colonia, calle, telefono);
+                cliente.agregarDomicilio(domicilio);
+                }
+                else {
+                    System.out.println("Ya cuenta con domicilios registrados");
+                    System.out.println("¿Desea agregar un nuevo domicilio?");
+                    String respuesta = lector.nextLine();
+
+                    if(respuesta.equalsIgnoreCase("sí") || respuesta.equalsIgnoreCase("si")) {
+                        registrarDomicilio();
+                    }
+                }
+    }
+
 }

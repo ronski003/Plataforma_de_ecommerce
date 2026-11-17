@@ -33,6 +33,7 @@ public class TarjetaCredito extends MedioPago{
             {
                 System.out.println("Se ha realizado el pago");
                 this.saldo -= monto;
+                punto.acumulacionPunto(monto);
             }
             else{
                 System.out.println("Fondos insuficientes");
@@ -66,5 +67,13 @@ public class TarjetaCredito extends MedioPago{
 
     public void setSaldo(float saldo) {
         this.saldo = saldo;
+    }
+
+    public Punto getPunto() {
+        return punto;
+    }
+
+    public void setPunto(Punto punto) {
+        this.punto = punto;
     }
 }

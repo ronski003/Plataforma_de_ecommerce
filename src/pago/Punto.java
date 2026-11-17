@@ -19,11 +19,11 @@ public class Punto extends MedioPago{
         int valorPuntos = puntosEfectivo(this.saldo);
         
 
-        if(valorPuntos > saldo)
+        if(valorPuntos >= monto)
         {
             super.procesarPago(monto);
 
-            int valorMonto = (int) monto/10;
+            int valorMonto = (int) monto*10;
             this.saldo -= valorMonto;
 
             System.out.println("Saldo de puntos: "+this.getSaldo());

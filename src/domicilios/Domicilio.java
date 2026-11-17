@@ -7,6 +7,12 @@ public class Domicilio {
     private String colonia;
     private String telefono;
 
+    public Domicilio(String colonia, String calle, String telefono) {
+        this.colonia = colonia;
+        this.calle = calle;
+        this.telefono = telefono;
+    }
+
     public void actualizarTelefono() {
         Scanner lector = new Scanner(System.in);
         System.out.println("Ingrese el nuevo número asociado al domicilio");

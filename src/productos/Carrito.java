@@ -36,8 +36,8 @@ public class Carrito {
                 //Variables utilizadas  
                 temporal = lector.nextLine();
                 temporal =temporal.trim().toUpperCase(); 
-                encontrado = false; 
-
+                encontrado = false;
+                
                 for(i=0; i<BD.getListaProductos().size(); i++){
                     //Object p = BD.getListaProductos().get(i);
                     String nombre = BD.getListaProductos().get(i).getNombreProducto().toUpperCase().trim(); 
@@ -81,7 +81,8 @@ public class Carrito {
                                 }
                             }
                         }while(validador==false);
-                        break;
+
+                        break;              
                     }
                 }
                 if(!encontrado) {

@@ -1,15 +1,17 @@
 package pago;
+
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Scanner;
 
-public class TarjetaCredito extends MedioPago{
+public class TarjetaCredito extends MedioPago {
+
     private String numTarjeta;
     private int nip;
     private float saldo;
     private Punto punto;
 
-    public TarjetaCredito(String alias, String numTarjeta, int nip){
+    public TarjetaCredito(String alias, String numTarjeta, int nip) {
         super(alias);
         this.numTarjeta = numTarjeta;
         this.nip = nip;
@@ -20,61 +22,74 @@ public class TarjetaCredito extends MedioPago{
         this.punto = new Punto(this.saldo);
     }
 
-    @Override 
+    @Override
     public boolean procesarPago(float monto) {
         DecimalFormat formato = new DecimalFormat("#0.00");
         Scanner lector = new Scanner(System.in);
+        int nip = 0;
+        try {
         System.out.print("Ingrese el NIP: ");
-        int nip = lector.nextInt();
+        nip = lector.nextInt();
+        lector.nextLine();
+        } catch(Exception e) {
+            System.out.println("El NIP debe contener únicamente números");
+            lector.nextLine();
+            return false;
+        }
 
-        if(nip != this.getNip()) {
+        if (nip != this.getNip()) {
             System.out.println("NIP incorrecto");
             return false;
         }
-        
+
+        System.out.println("\n");
         System.out.println("1. Saldo de la tarjeta");
         System.out.println("2. Puntos acumulados");
-        System.out.println("Seleccione el método de pago: ");
+        System.out.print("Seleccione el método de pago: ");
         int opcion = lector.nextInt();
 
-        
-        if(opcion == 2) {
+        if (opcion == 2) {
             super.procesarPago(monto);
-            
+
             return punto.procesarPago(monto);
         }
-        System.out.println("Saldo: $"+formato.format(this.getSaldo()));
+        System.out.println("\n");
+        System.out.println("Saldo: $" + formato.format(this.getSaldo()));
         super.procesarPago(monto);
-        if(this.saldo >= monto)
-        {
+        if (this.saldo >= monto) {
             System.out.println("Se ha realizado el pago");
             this.saldo -= monto;
             punto.acumulacionPunto(monto);
             return true;
-        }
-        else{
+        } else {
             System.out.println("Fondos insuficientes");
             return false;
-                
+
         }
-        
+
     }
 
     @Override
     public void mostrarInformacion() {
         DecimalFormat formato = new DecimalFormat("#0.00");
         String ultimos;
-        if(this.getNumTarjeta().length() >= 4) {
-            ultimos = this.getNumTarjeta().substring(this.numTarjeta.length()-4);
-        }
-        else {
+        if (this.getNumTarjeta().length() >= 4) {
+            ultimos = this.getNumTarjeta().substring(this.numTarjeta.length() - 4);
+        } else {
             ultimos = this.getNumTarjeta();
         }
         System.out.println("Alias: " + getAlias());
-        System.out.println("Tarjeta: **** **** ****" + ultimos);
+        System.out.println("Tarjeta: **** **** **** " + ultimos);
         System.out.println("Saldo: $" + formato.format(this.getSaldo()));
-        System.out.println("Puntos acumulados: "+punto.getSaldo());
-    }   
+        System.out.println("Puntos acumulados: " + punto.getSaldo());
+    }
+
+    @Override 
+    public String informacionPedido() {
+        String ultimos = this.getNumTarjeta().substring(this.numTarjeta.length() - 4);
+
+        return "Pago con Tarjeta. Terminación: "+ultimos;
+    }
 
     public String getNumTarjeta() {
         return numTarjeta;

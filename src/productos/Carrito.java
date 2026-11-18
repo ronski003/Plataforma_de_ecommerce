@@ -32,11 +32,11 @@ public class Carrito {
 
         do{
             System.out.println("Seleccione el elemento que desea agregar al carrito, ya sea escribiendo su identificador único o su nombre");
-            do{
+            //do{
                 //Variables utilizadas  
                 temporal = lector.nextLine();
                 temporal =temporal.trim().toUpperCase(); 
-                encontrado = true; 
+                encontrado = false; 
 
                 for(i=0; i<BD.getListaProductos().size(); i++){
                     //Object p = BD.getListaProductos().get(i);
@@ -44,7 +44,7 @@ public class Carrito {
                     String id =String.valueOf(BD.getListaProductos().get(i).getIdentificadorUnico());
                     id = id.trim().toUpperCase(); 
                     if( temporal.equals(nombre) || temporal.equals(id)){ 
-                        validador = true;
+                        encontrado = true;
                         do{
                             System.out.println("Ingrese la cantidad que desea agregar al carrito");
                             validador = lector.hasNextInt();
@@ -56,7 +56,8 @@ public class Carrito {
                                 System.out.println("-----");
 
                             }else{
-                                int cantidad = lector.nextInt(); 
+                                int cantidad = lector.nextInt();
+                                lector.nextLine(); 
                                 Producto temp = BD.getListaProductos().get(i); 
                                 if(cantidad>0){
                                     if(carrito.contains(temp)) {
@@ -80,16 +81,14 @@ public class Carrito {
                                 }
                             }
                         }while(validador==false);
+                        break;
                     }
                 }
                 if(!encontrado) {
                     System.out.println("Error 404, no se encontró el producto solicitado");
                     System.out.println("------");
-                    validador = false;
                 } 
-            }while(validador ==false);
-
-        lector.nextLine(); 
+            //}while(validador ==false);
         System.out.println("____________________________________________________");
         System.out.println("¿Desea salir o agregar otro producto al carrito?");
         System.out.println("En caso de querer agregar otro producto teclee cualquier digito excepto 1");
@@ -100,7 +99,7 @@ public class Carrito {
             opcion = false;
         }
         System.out.println("____________________________________________________");
-    }while(opcion != false);
+    }while(opcion);
         
     }
     

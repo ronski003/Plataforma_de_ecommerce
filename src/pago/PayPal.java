@@ -1,9 +1,11 @@
 package pago;
+
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.Scanner;
 
-public class PayPal extends MedioPago{
+public class PayPal extends MedioPago {
+
     String correo;
     String contrasena;
     private float saldo;
@@ -22,39 +24,34 @@ public class PayPal extends MedioPago{
         boolean conexion = aleatorio.nextBoolean();
         return conexion;
     }
-    
-    @Override 
+
+    @Override
     public boolean procesarPago(float monto) {
         DecimalFormat formato = new DecimalFormat("#0.00");
         Scanner lector = new Scanner(System.in);
 
-        System.out.println("Correo registrado: "+this.getCorreo());
+        System.out.println("Correo registrado: " + this.getCorreo());
         System.out.print("Ingrese la contraseña del correo: ");
         String contrasenaIngreso = lector.nextLine();
 
-        if(contrasenaIngreso.equals(this.getContrasena())) {
+        if (contrasenaIngreso.equals(this.getContrasena())) {
             boolean validacion = centralPaypal();
-            if(validacion)
-            {
-                System.out.println("Saldo: $"+formato.format(this.getSaldo()));
+            if (validacion) {
+                System.out.println("Saldo: $" + formato.format(this.getSaldo()));
                 super.procesarPago(monto);
-                if(this.saldo >= monto)
-                {
+                if (this.saldo >= monto) {
                     System.out.println("Se ha realizado el pago");
                     this.saldo -= monto;
                     return true;
-                }
-                else {
+                } else {
                     System.out.println("Fondos insuficientes. Intente otro medio de pago");
                     return false;
                 }
-            }
-            else{
-                System.out.println("Paypal rechazó el pago. No se pudo establecer conexión con la central. Intente otor medio de pago");
+            } else {
+                System.out.println("Paypal rechazó el pago. No se pudo establecer conexión con la central. Intente otro medio de pago");
                 return false;
             }
-        }
-        else {
+        } else {
             System.out.println("El correo ingresado no coincide con la cuenta. El pago fue recha");
             return false;
         }
@@ -62,11 +59,18 @@ public class PayPal extends MedioPago{
 
     @Override
     public void mostrarInformacion() {
+        System.out.println("\n");
         DecimalFormat formato = new DecimalFormat("#0.00");
         System.out.println("Alias: " + getAlias());
         System.out.println("Correo: " + correo);
-        System.out.println("Saldo: $"+formato.format(this.getSaldo()));
-}
+        System.out.println("Saldo: $" + formato.format(this.getSaldo()));
+    }
+
+    @Override
+    public String informacionPedido() {
+        return "Pago con PayPal. Correo: " + this.correo;
+    }
+
     public String getCorreo() {
         return correo;
     }
@@ -83,7 +87,7 @@ public class PayPal extends MedioPago{
         this.contrasena = contrasena;
     }
 
-     public float getSaldo() {
+    public float getSaldo() {
         return saldo;
     }
 

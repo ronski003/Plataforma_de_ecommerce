@@ -18,7 +18,6 @@ public class BaseDeDatos{
     private BaseDeDatos(){
         this.listaProductos = new ArrayList<>();
         cargaProductos();
-        System.out.println("Se ha inicializado la base de datos...");
     }
     
     //Metodo que verifica que no haya otra estancia de base de datos 

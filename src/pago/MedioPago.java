@@ -15,7 +15,9 @@ public abstract class MedioPago {
         return true;
     }
 
-    public abstract void mostrarInformacion();   
+    public abstract void mostrarInformacion(); 
+    
+    public abstract String informacionPedido();
 
     public String getAlias() {
         return alias;

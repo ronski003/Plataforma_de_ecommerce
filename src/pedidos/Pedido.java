@@ -4,6 +4,8 @@ import domicilios.Domicilio;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,6 +14,7 @@ import java.util.Scanner;
 import pago.MedioPago;
 import productos.Carrito;
 import usuarios.Cliente;
+import java.util.ArrayList;
 
 public class Pedido {
 
@@ -127,9 +130,108 @@ public class Pedido {
         } catch (IOException e) {
             System.out.println("Error 501, no se pudo registrar el pedido");
         }
-    
+
+        
     }
 
+    public void imprimirTicket (){ 
+        ArrayList<String> listaNombres = new ArrayList<>(); 
+        Scanner lector =new Scanner(System.in);
+        boolean validador; 
+        try{
+            File comprobacion = new File("Pedido de "+cliente.getNombreCompleto().trim()+ ".txt");
+            if(!comprobacion.exists()){
+                System.out.println("No se pueden rescatar los pedidos por el momento");
+            }else{
+                String temp = "Pedido de "+cliente.getNombreCompleto().trim()+" No. 1.txt";
+                listaNombres.add(temp); 
+                for (int i= 2; i<=15; i++){
+                    File comprobacion2 = new File("Pedido de "+cliente.getNombreCompleto().trim()+" No. "+i+".txt");
+                    if(!comprobacion2.exists()){
+                        break;
+                    }
+                    else{
+                        temp = "Pedido de "+cliente.getNombreCompleto().trim()+" No. "+i+".txt";
+                        listaNombres.add(temp); 
+                    }
+                }
+                //Se imprimen los nombres de los pedidos. 
+                for (int j=0; j<listaNombres.size(); j++){
+                    int m =j+1;
+                    System.out.println("Pedido de "+cliente.getNombreCompleto().trim()+" No. "+m+".txt");
+                }
+                System.out.println("");
+                
+                do{
+                    System.out.println("_______________________________________________________");
+                    System.out.println("Ingrese el número del pedido que desea recuperar");
+                    validador = lector.hasNextInt();
+                    if(validador == false){
+                        System.out.println("No se ha detectado ningun numero");
+                        System.out.println("Vuélvalo a intentar");
+                        lector.nextLine(); 
+                        System.out.println("-----");
+
+                    }else{
+                        
+                        int num = lector.nextInt(); 
+                        lector.nextLine(); 
+                        if(num<1 || num>listaNombres.size()){ //CAso de error
+                            validador = false; 
+                            System.out.println("El numero que ha sido ingresado no se encuentra deentro del intervalo de pedidos");
+                            System.out.println("Intentelo otra vez....");
+                            System.out.println("");
+                        }else{
+                            //Se imprimen los pedidos 
+                            System.out.println("Pedido encontrado");
+                            System.out.println("Mostrando en pantalla: ");
+                            if(num==1){
+                               this.imprimirPedido("Pedido de "+cliente.getNombreCompleto().trim()+ ".txt");
+                            }
+                            else{
+                                  
+                                this.imprimirPedido("Pedido de "+cliente.getNombreCompleto().trim()+" No. "+num+".txt");
+                                System.out.println("");
+                            }
+                            break; 
+                        }
+                        
+                    }
+                        
+                }while(validador == false);
+                System.out.println("______________________________________________________________________________");
+           }
+            
+        }catch (Exception e) {
+            System.out.println("No se pueeden acceder a los pedidos por el momento");      
+        }   
+    }
+
+    
+     public void imprimirPedido(String nombreArchivo){
+         //Se valida que exista un archivo de pedido
+         try {   
+            File vacio = new File(nombreArchivo);
+            if(!vacio.exists()){
+                System.out.println("El pedido no se encuentra disponible por el momento");
+            }else{
+                    String linea =""; 
+                    FileReader archivo = new FileReader(nombreArchivo);
+                    BufferedReader lectura = new BufferedReader(archivo);
+                    while(linea != null){
+                        linea = lectura.readLine();
+                        if(linea==null){
+                            System.out.println("");
+                            break; //No imprime NULL cuando ya no hay mas lineas 
+                        }
+                        System.out.println(linea);                    
+                    }
+                lectura.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error al imprimir el ticket");
+        }
+    }
     public Cliente getCliente() {
         return cliente;
     }

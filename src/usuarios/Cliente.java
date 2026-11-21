@@ -9,7 +9,7 @@ public class Cliente extends Usuario {
     private ArrayList<Domicilio> domicilios; 
     private ArrayList<MedioPago> pagos;
 
-    private final Carrito = new Carrito();
+    private final Carrito carrito = new Carrito();
 
     public Carrito getCarrito() {
         return carrito;

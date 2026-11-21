@@ -228,7 +228,7 @@ public class Pedido {
 
         File seleccionado = archivos[opcion - 1];
 
-        imprimirPedido(seleccionado.getParh());
+        imprimirPedido(seleccionado.getPath());
         reimprimirPedido(seleccionado);
     }
 
@@ -259,7 +259,7 @@ public class Pedido {
     }
 
     private void reimprimirPedido(File original) {
-        File carpeta = new File( carpetaCliente, "reimpresiones");
+        File carpeta = new File( carpetaCliente(), "reimpresiones");
 
         if (!carpeta.exists() && !carpeta.mkdirs()) {
             System.out.println("No se pudo crear la carpeta de reimpresiones");

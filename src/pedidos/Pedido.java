@@ -75,7 +75,7 @@ public class Pedido {
         }
 
         System.out.println("\n");
-        Domicilio domicilio = cliente.getDomicilios().get(opcioon - 1);
+        Domicilio domicilio = cliente.getDomicilios().get(opcion - 1);
 
         System.out.println("Seleccione un medio de pago para envío");
         for (int i = 0; i < cliente.getPagos().size(); i++) {

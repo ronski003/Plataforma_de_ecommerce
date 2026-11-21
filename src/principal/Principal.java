@@ -113,7 +113,6 @@ public class Principal {
                     registroPago();
                     break;
                 case 4:
-                    Cliente cliente = (Cliente) usuario;
                     Pedido pedido = new Pedido(cliente, carrito);
 
                     String continuar = pedido.confirmoPedido() ? "Gracias por su compra" : "Realice lo indicado e intente nuevamente";

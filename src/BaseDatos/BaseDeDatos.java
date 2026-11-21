@@ -110,8 +110,13 @@ public class BaseDeDatos{
             do{
                 System.out.println("Ingresa el identificador del producto");
                 validadorTemp = lector.hasNextInt();
+                
                 if(validadorTemp == true){
                     long id = lector.nextLong(); 
+                    if (id<=0) {
+                        System.out.println("El identificador debe ser positivo");
+                        validadorTemp = false;
+                    }
                     for(int i =0; i<this.listaProductos.size(); i++){ //Se investiga si el identificador ya fue usado 
                        long idr= this.listaProductos.get(i).getIdentificadorUnico();
                         if(idr ==id){

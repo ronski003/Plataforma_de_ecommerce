@@ -60,10 +60,22 @@ public class Pedido {
             System.out.println("----------------------------------");
             j++;
         }
-        System.out.print("Indique su opción: ");
-        int opcion = lector.nextInt();
+        int opcion;
+        while (true) {
+            System.out.print("Indique su opción:");
+            try {
+                opcion = Integer.parseInt(lector.nextLine().trim());
+                if (opcion >= 1 && opcion <= cliente.getDomicilios().size()) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                //entrada no es un numero 
+            }
+            System.out.println("Opción invalida. Inténtelo de nuevo.");
+        }
+
         System.out.println("\n");
-        Domicilio domicilio = cliente.getDomicilios().get(opcion - 1);
+        Domicilio domicilio = cliente.getDomicilios().get(opcioon - 1);
 
         System.out.println("Seleccione un medio de pago para envío");
         for (int i = 0; i < cliente.getPagos().size(); i++) {

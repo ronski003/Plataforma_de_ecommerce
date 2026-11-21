@@ -15,13 +15,40 @@ import pago.MedioPago;
 import productos.Carrito;
 import usuarios.Cliente;
 import java.util.ArrayList;
-
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.Arrays;
+import java.util.Comparator;
+    
 public class Pedido {
 
+    
     private Cliente cliente;
     private Carrito carrito;
     private LocalDate fecha;
     private LocalTime hora;
+    
+    private File carpetaCliente() {
+        String usuario = cliente.getNombreUsuario().toLowerCase(Locale.ROOT);
+
+        String nombreCarpeta = URLEncoder.encode(usuario,StandardCharsets.UTF_8);
+
+        return new File("tickets", nombreCarpeta);
+    }
+    
+    private File[] obtenerPedidos() {
+        File carpeta = carpetaCliente();
+
+        File[] archivos = carpeta.listFiles((dir, nombre) -> nombre.matches("pedido_[0-9]+\\.txt"));
+        if (archivos == null) {
+            return new File[0];
+        }
+
+        Arrays.sort(archivos,Comparator.comparingInt(archivo -> Integer.parseInt(archivo.getName().replace("pedido_", "").replace(".txt", ""))));
+
+        return archivos;
+    }
 
     public Pedido(Cliente cliente, Carrito carrito) {
         this.cliente = cliente;
@@ -120,15 +147,20 @@ public class Pedido {
 
     public void GuardarArchivo(Domicilio domicilio, MedioPago medio) {
         DecimalFormat formato = new DecimalFormat("#0.00");
-        String nombreArchivo = "Pedido de " + cliente.getNombreCompleto().trim() + ".txt";
-        File archivo = new File(nombreArchivo);
-        int j = 2;
+        File carpeta = carpetaCliente();
 
-        while(archivo.exists()) {
-            String nombreNuevo = "Pedido de "+cliente.getNombreCompleto().trim()+" No. "+j+".txt";
-            archivo = new File(nombreNuevo);
-            j++;     
+        if (!carpeta.exists() && !carpeta.mkdirs()) {
+            System.out.println("No se pudo crear la carpeta de pedidos");
+            return;
         }
+
+        int numero = 1;
+        File archivo;
+
+        do {
+            archivo = new File( carpeta, "pedido_" + numero +".txt");
+            numero++;
+        } while (archivo.exists());
 
         try {
             FileWriter escritor = new FileWriter(archivo);

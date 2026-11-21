@@ -68,7 +68,7 @@ public class Carrito {
                                     } else {
                                         Producto copia = new Producto(temp.getNombreProducto(),temp.getPrecio(),temp.getCategoria(),temp.getIdentificadorUnico());
                                         copia.setStock(cantidad);
-                                        carrito.add(copia)   
+                                        carrito.add(copia);
                                         System.out.println("El producto "+temp.getNombreProducto()+ " ha sido agregado correctamente a tu carrito");
                                         this.imprimirCarrito();
                                         System.out.println("");

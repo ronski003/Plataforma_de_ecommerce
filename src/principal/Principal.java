@@ -182,8 +182,16 @@ public class Principal {
                 System.out.print("Alias: ");
                 String alias = lector.nextLine();
 
-                System.out.print("Número de tarjeta: ");
-                String numero = lector.nextLine();
+                String numero;
+
+                do {
+                    System.out.print("Número de tarjeta (16 dígitos): ");
+                    numero = lector.nextLine().trim();
+
+                    if(!numero.matches("\\d{16}")) {
+                        System.out.println("Número de tarjeta inválido. Inténtelo de nuevo.");
+                    }
+                } while (!numero.matches("\\d{16}"));
                 do {
                     try {
                         System.out.print("NIP: ");

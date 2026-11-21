@@ -15,7 +15,6 @@ public class Principal {
     static Scanner lector = new Scanner(System.in);
     static GestorUsuarios gestor = new GestorUsuarios();
     static Usuario usuario;
-    static Carrito carrito = new Carrito();
 
     public static void main(String[] args) {
         int opcion = 0;
@@ -82,6 +81,8 @@ public class Principal {
 
     public static void menuCliente() {
         int opcion = 0;
+        Cliente cliente = (Cliente) usuario;
+        Carrito carrito = cliente.getCarrito();
 
         do {
             System.out.println("\n-----CLIENTES-----");

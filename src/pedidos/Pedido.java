@@ -83,11 +83,23 @@ public class Pedido {
             cliente.getPagos().get(i).mostrarInformacion();
             System.out.println("----------------------------------");
         }
-        System.out.print("Indique su ocpión: ");
-        int opcion2 = lector.nextInt();
-        System.out.println("\n");
+        int opcion2;
+        while (true) {
+            System.out.print("Indique su opción: ");
 
-        MedioPago medio = cliente.getPagos().get(opcion2 - 1);
+            try {
+                opcion2 = Integer.parseInt(lector.nextLine().trim());
+                if (opcion2 >= 1 && opcion2 <= cliente.getPagos().size()) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                //La entrada no es numerica
+            }
+            
+            System.out.println("Opción inválida. Inténtelo de nuevo");
+        }
+        System.out.println("\n");
+        MedioPago medio = cliente.getPagos().get(opcion2 -1);
 
         float total = 0;
 

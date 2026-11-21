@@ -126,7 +126,8 @@ public class Principal {
                     carrito.imprimirCarrito();
                     break;
                 case 7:
-                    
+                    Pedido consulta = new Pedido((Cliente) usuario, carrito);
+                    consulta.imprimirTicket();
                     break;
                 case 8:
                     System.out.println("Regresando...");

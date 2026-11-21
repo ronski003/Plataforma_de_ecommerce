@@ -55,12 +55,17 @@ public class Principal {
                     System.out.print("Nombre completo: ");
                     String nombreCompleto = lector.nextLine();
 
-                    if (gestor.registrarCliente(nombre, nombreCompleto)) {
-                        System.out.println("Usuario registrado");
-                    } else {
-                        System.out.println("No es posible registrar el usuario. Se ha detectado una coincidencia en el sistema");
+                    try {    
+                        if (gestor.registrarCliente(nombre, nombreCompleto)) {
+                            System.out.println("Usuario registrado");
+                        } else {
+                            System.out.println("El nombre de usuario ya existe");
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
+                    
                 case 3:
                     System.out.println("¿Está seguro de querer abandonar el sistema? (s/n)");
                     String respuesta = lector.nextLine();

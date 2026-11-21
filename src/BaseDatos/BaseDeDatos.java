@@ -60,7 +60,7 @@ public class BaseDeDatos{
 
                 precio = lector.nextFloat();
 
-                if(precio <= 0){
+                if(!Float.isFinite(precio) || precio <= 0){
                     System.out.println("ERROR");
                     System.out.println("Se ha detectado que al producto " + nombreProduct + " se le ha dado un precio menor o igual a cero");
                     System.out.println("Se solicita que coloque un precio mayor a cero");
@@ -109,7 +109,7 @@ public class BaseDeDatos{
             //Se registra el identificador del producto
             do{
                 System.out.println("Ingresa el identificador del producto");
-                validadorTemp = lector.hasNextInt();
+                validadorTemp = lector.hasNextLong();
                 
                 if(validadorTemp == true){
                     long id = lector.nextLong(); 

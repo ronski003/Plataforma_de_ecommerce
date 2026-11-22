@@ -1,5 +1,6 @@
 package domicilios;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Domicilio {
@@ -43,4 +44,35 @@ public class Domicilio {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.calle);
+        hash = 47 * hash + Objects.hashCode(this.colonia);
+        hash = 47 * hash + Objects.hashCode(this.telefono);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Domicilio other = (Domicilio) obj;
+        if (!Objects.equals(this.calle, other.calle)) {
+            return false;
+        }
+        if (!Objects.equals(this.colonia, other.colonia)) {
+            return false;
+        }
+        return Objects.equals(this.telefono, other.telefono);
+    }
+    
 }

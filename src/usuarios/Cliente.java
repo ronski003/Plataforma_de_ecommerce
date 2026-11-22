@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import pago.MedioPago;
 
 public class Cliente extends Usuario {
-    private ArrayList<Domicilio> domicilios; 
+
+    private ArrayList<Domicilio> domicilios;
     private ArrayList<MedioPago> pagos;
 
     public Cliente(String nombreUsuario, String nombreCompleto) {
@@ -20,13 +21,16 @@ public class Cliente extends Usuario {
     }
 
     public void agregarDomicilio(Domicilio domicilioNuevo) {
-        if(!this.getDomicilios().equals(domicilioNuevo))
-        {
+
+        if (!this.getDomicilios().contains(domicilioNuevo)) {
+
             this.getDomicilios().add(domicilioNuevo);
+
+        } else {
+
+            System.out.println("Domicilio ya registrado");
         }
-        else {
-            System.out.print("Domicilio ya registrado");
-        }
+
     }
 
     public ArrayList<Domicilio> getDomicilios() {
@@ -38,10 +42,9 @@ public class Cliente extends Usuario {
     }
 
     public void agregarMedioPago(MedioPago medio) {
-        if(!this.getPagos().contains(medio)) {
-        this.getPagos().add(medio);
-        }
-        else {
+        if (!this.getPagos().contains(medio)) {
+            this.getPagos().add(medio);
+        } else {
             System.out.print("Medio de pago ya registrado");
         }
     }

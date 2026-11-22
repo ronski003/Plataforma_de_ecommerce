@@ -1,0 +1,13 @@
+			PEDIDO
+-------------------------------------------------------------
+
+Producto: Smartphone Samsung	Unidades: 1	Precio: $8999.99
+Monto total: $8999.99
+Domicilio :Coyoacán, Calle Delta
+Pago con PayPal. Correo: fer123@gmail.com
+
+			INFORMACIÓN ADICIONAL
+
+Fecha del pedido: 2026-11-21	Hora del pedido: 18:26:41.651957
+Entrega estimada del pedido: 2026-12-05
+-------------------------------------------------------------

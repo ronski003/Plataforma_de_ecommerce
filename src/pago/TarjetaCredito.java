@@ -1,6 +1,7 @@
 package pago;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -28,10 +29,10 @@ public class TarjetaCredito extends MedioPago {
         Scanner lector = new Scanner(System.in);
         int nip = 0;
         try {
-        System.out.print("Ingrese el NIP: ");
-        nip = lector.nextInt();
-        lector.nextLine();
-        } catch(Exception e) {
+            System.out.print("Ingrese el NIP: ");
+            nip = lector.nextInt();
+            lector.nextLine();
+        } catch (Exception e) {
             System.out.println("El NIP debe contener únicamente números");
             lector.nextLine();
             return false;
@@ -84,11 +85,33 @@ public class TarjetaCredito extends MedioPago {
         System.out.println("Puntos acumulados: " + punto.getSaldo());
     }
 
-    @Override 
+    @Override
     public String informacionPedido() {
         String ultimos = this.getNumTarjeta().substring(this.numTarjeta.length() - 4);
 
-        return "Pago con Tarjeta. Terminación: "+ultimos;
+        return "Pago con Tarjeta. Terminación: " + ultimos;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.numTarjeta);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TarjetaCredito other = (TarjetaCredito) obj;
+        return Objects.equals(this.numTarjeta, other.numTarjeta);
     }
 
     public String getNumTarjeta() {

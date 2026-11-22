@@ -1,27 +1,26 @@
 package pedidos;
 
 import domicilios.Domicilio;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 import pago.MedioPago;
 import productos.Carrito;
 import usuarios.Cliente;
-import java.util.ArrayList;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
     
 public class Pedido {
 
@@ -274,7 +273,7 @@ public class Pedido {
             System.out.println("Ticket generado: " + copia.getPath());
 
         } catch (IOException e) {
-            System.out.println("No sse puedo reimprimir el ticket");
+            System.out.println("No se puedo reimprimir el ticket");
         }
     }
     

@@ -15,7 +15,6 @@ public class Principal {
     static Scanner lector = new Scanner(System.in);
     static GestorUsuarios gestor = new GestorUsuarios();
     static Usuario usuario;
-    static Carrito carrito = new Carrito();
 
     public static void main(String[] args) {
         int opcion = 0;
@@ -56,12 +55,17 @@ public class Principal {
                     System.out.print("Nombre completo: ");
                     String nombreCompleto = lector.nextLine();
 
-                    if (gestor.registrarCliente(nombre, nombreCompleto)) {
-                        System.out.println("Usuario registrado");
-                    } else {
-                        System.out.println("No es posible registrar el usuario. Se ha detectado una coincidencia en el sistema");
+                    try {    
+                        if (gestor.registrarCliente(nombre, nombreCompleto)) {
+                            System.out.println("Usuario registrado");
+                        } else {
+                            System.out.println("El nombre de usuario ya existe");
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
+                    
                 case 3:
                     System.out.println("¿Está seguro de querer abandonar el sistema? (s/n)");
                     String respuesta = lector.nextLine();
@@ -82,6 +86,8 @@ public class Principal {
 
     public static void menuCliente() {
         int opcion = 0;
+        Cliente cliente = (Cliente) usuario;
+        Carrito carrito = cliente.getCarrito();
 
         do {
             System.out.println("\n-----CLIENTES-----");
@@ -107,7 +113,6 @@ public class Principal {
                     registroPago();
                     break;
                 case 4:
-                    Cliente cliente = (Cliente) usuario;
                     Pedido pedido = new Pedido(cliente, carrito);
 
                     String continuar = pedido.confirmoPedido() ? "Gracias por su compra" : "Realice lo indicado e intente nuevamente";
@@ -120,7 +125,8 @@ public class Principal {
                     carrito.imprimirCarrito();
                     break;
                 case 7:
-                    
+                    Pedido consulta = new Pedido((Cliente) usuario, carrito);
+                    consulta.imprimirTicket();
                     break;
                 case 8:
                     System.out.println("Regresando...");
@@ -169,32 +175,32 @@ public class Principal {
         System.out.println("2. PayPal");
         System.out.print("Indique el medio de pago: ");
         int opcion = validacion();
-        int nip = 0;
+        String nip = "";
 
         switch (opcion) {
             case 1:
                 System.out.print("Alias: ");
                 String alias = lector.nextLine();
 
-                System.out.print("Número de tarjeta: ");
-                String numero = lector.nextLine();
+                String numero;
+
                 do {
-                    try {
-                        System.out.print("NIP: ");
-                        nip = lector.nextInt();
-                        lector.nextLine();
-                        if (nip < 0) {
-                            System.out.println("Intente nuevamente");
-                        } else if (String.valueOf(nip).length() != 4) {
-                            System.out.println("El NIP debe contener cuatro dígitos");
-                        } else {
-                            correcto = true;
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Intente nuevamente");
-                        lector.nextLine();
+                    System.out.print("Número de tarjeta (16 dígitos): ");
+                    numero = lector.nextLine().trim();
+
+                    if(!numero.matches("\\d{16}")) {
+                        System.out.println("Número de tarjeta inválido. Inténtelo de nuevo.");
                     }
-                } while (!correcto);
+                } while (!numero.matches("\\d{16}"));
+
+                do {
+                    System.out.print("NIP (4 dígitos):");
+                    nip = lector.nextLine().trim();
+
+                    if (!nip.matches("\\d{4}")) {
+                        System.out.println("El NIP debe contener exactamente 4 dígitos");
+                    }
+                } while (!nip.matches("\\d{4}"));
 
                 TarjetaCredito tarjeta = new TarjetaCredito(alias, numero, nip);
                 cliente.agregarMedioPago(tarjeta);

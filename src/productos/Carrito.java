@@ -66,14 +66,15 @@ public class Carrito {
                                         productoCarrito.setStock(productoCarrito.getStock() + cantidad);
                                         this.imprimirCarrito();
                                     } else {
-                                        temp.setStock(cantidad);
-                                        carrito.add(temp);
+                                        Producto copia = new Producto(temp.getNombreProducto(),temp.getPrecio(),temp.getCategoria(),temp.getIdentificadorUnico());
+                                        copia.setStock(cantidad);
+                                        carrito.add(copia);
                                         System.out.println("El producto "+temp.getNombreProducto()+ " ha sido agregado correctamente a tu carrito");
                                         this.imprimirCarrito();
                                         System.out.println("");
                                         break;
                                     }
-                                }else{
+                                } else {
                                     System.out.println("No puedes digitar cantidades menores o iguales a cero");
                                     System.out.println("Inténtelo de nuevo");
                                     System.out.println("-----");

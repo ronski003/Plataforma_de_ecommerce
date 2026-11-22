@@ -3,11 +3,18 @@ package usuarios;
 import domicilios.Domicilio;
 import java.util.ArrayList;
 import pago.MedioPago;
+import productos.Carrito;
 
 public class Cliente extends Usuario {
 
     private ArrayList<Domicilio> domicilios;
     private ArrayList<MedioPago> pagos;
+
+    private final Carrito carrito = new Carrito();
+
+    public Carrito getCarrito() {
+        return carrito;
+    }
 
     public Cliente(String nombreUsuario, String nombreCompleto) {
         super(nombreUsuario, nombreCompleto);

@@ -8,14 +8,14 @@ import java.util.Scanner;
 public class TarjetaCredito extends MedioPago {
 
     private String numTarjeta;
-    private int nip;
+    private String nip;
     private float saldo;
     private Punto punto;
 
-    public TarjetaCredito(String alias, String numTarjeta, int nip) {
+    public TarjetaCredito(String alias, String numTarjeta, String nip) {
         super(alias);
-        this.numTarjeta = numTarjeta;
-        this.nip = nip;
+        setNumTarjeta(numTarjeta);
+        setNip(nip);
 
         Random aleatorio = new Random();
         this.saldo = aleatorio.nextFloat(30000.0f, 80001.0f);
@@ -27,18 +27,17 @@ public class TarjetaCredito extends MedioPago {
     public boolean procesarPago(float monto) {
         DecimalFormat formato = new DecimalFormat("#0.00");
         Scanner lector = new Scanner(System.in);
-        int nip = 0;
-        try {
-            System.out.print("Ingrese el NIP: ");
-            nip = lector.nextInt();
-            lector.nextLine();
-        } catch (Exception e) {
-            System.out.println("El NIP debe contener únicamente números");
-            lector.nextLine();
+
+        System.out.print("Ingrese el NIP: ");
+        String nipIngresado = lector.nextLine().trim();
+
+        if (!nipIngresado.matches("\\d{4}")) {
+            System.out.println("El NIP debe contener exactamente 4 dígitos");
+
             return false;
         }
 
-        if (nip != this.getNip()) {
+        if (!nipIngresado.equals(this.getNip())) {
             System.out.println("NIP incorrecto");
             return false;
         }
@@ -46,8 +45,23 @@ public class TarjetaCredito extends MedioPago {
         System.out.println("\n");
         System.out.println("1. Saldo de la tarjeta");
         System.out.println("2. Puntos acumulados");
-        System.out.print("Seleccione el método de pago: ");
-        int opcion = lector.nextInt();
+        int opcion;
+
+        while (true) {
+            System.out.print("Seleccione el método de pago: ");
+
+            try {
+                opcion = Integer.parseInt(lector.nextLine().trim());
+                
+                if (opcion == 1 || opcion == 2) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                //La entrada no es numérica
+            }
+
+            System.out.println("Opción inválida. Inténtelo de nuevo.");
+        }
 
         if (opcion == 2) {
             super.procesarPago(monto);
@@ -119,14 +133,21 @@ public class TarjetaCredito extends MedioPago {
     }
 
     public void setNumTarjeta(String numTarjeta) {
+        if (numTarjeta == null || !numTarjeta.matches("\\d{16}")) {
+            throw new IllegalArgumentException( "El número de tarjeta debe contener exactamente 16 ´digitos");
+        }
         this.numTarjeta = numTarjeta;
     }
 
-    public int getNip() {
+    public String getNip() {
         return nip;
     }
 
-    public void setNio(int nip) {
+    public void setNip(String nip) {
+        if (nip == null || !nip.matches("\\d{4}")) {
+            throw new IllegalArgumentException("NIP inválido");
+        }
+        
         this.nip = nip;
     }
 

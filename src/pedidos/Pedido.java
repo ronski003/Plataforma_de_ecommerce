@@ -15,13 +15,42 @@ import pago.MedioPago;
 import productos.Carrito;
 import usuarios.Cliente;
 import java.util.ArrayList;
-
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+    
 public class Pedido {
 
+    
     private Cliente cliente;
     private Carrito carrito;
     private LocalDate fecha;
     private LocalTime hora;
+    
+    private File carpetaCliente() {
+        String usuario = cliente.getNombreUsuario().toLowerCase(Locale.ROOT);
+
+        String nombreCarpeta = URLEncoder.encode(usuario,StandardCharsets.UTF_8);
+
+        return new File("tickets", nombreCarpeta);
+    }
+    
+    private File[] obtenerPedidos() {
+        File carpeta = carpetaCliente();
+
+        File[] archivos = carpeta.listFiles((dir, nombre) -> nombre.matches("pedido_[0-9]+\\.txt"));
+        if (archivos == null) {
+            return new File[0];
+        }
+
+        Arrays.sort(archivos,Comparator.comparingInt(archivo -> Integer.parseInt(archivo.getName().replace("pedido_", "").replace(".txt", ""))));
+
+        return archivos;
+    }
 
     public Pedido(Cliente cliente, Carrito carrito) {
         this.cliente = cliente;
@@ -60,8 +89,20 @@ public class Pedido {
             System.out.println("----------------------------------");
             j++;
         }
-        System.out.print("Indique su opción: ");
-        int opcion = lector.nextInt();
+        int opcion;
+        while (true) {
+            System.out.print("Indique su opción:");
+            try {
+                opcion = Integer.parseInt(lector.nextLine().trim());
+                if (opcion >= 1 && opcion <= cliente.getDomicilios().size()) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                //entrada no es un numero 
+            }
+            System.out.println("Opción invalida. Inténtelo de nuevo.");
+        }
+
         System.out.println("\n");
         Domicilio domicilio = cliente.getDomicilios().get(opcion - 1);
 
@@ -71,11 +112,23 @@ public class Pedido {
             cliente.getPagos().get(i).mostrarInformacion();
             System.out.println("----------------------------------");
         }
-        System.out.print("Indique su ocpión: ");
-        int opcion2 = lector.nextInt();
-        System.out.println("\n");
+        int opcion2;
+        while (true) {
+            System.out.print("Indique su opción: ");
 
-        MedioPago medio = cliente.getPagos().get(opcion2 - 1);
+            try {
+                opcion2 = Integer.parseInt(lector.nextLine().trim());
+                if (opcion2 >= 1 && opcion2 <= cliente.getPagos().size()) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                //La entrada no es numerica
+            }
+            
+            System.out.println("Opción inválida. Inténtelo de nuevo");
+        }
+        System.out.println("\n");
+        MedioPago medio = cliente.getPagos().get(opcion2 -1);
 
         float total = 0;
 
@@ -96,15 +149,20 @@ public class Pedido {
 
     public void GuardarArchivo(Domicilio domicilio, MedioPago medio) {
         DecimalFormat formato = new DecimalFormat("#0.00");
-        String nombreArchivo = "Pedido de " + cliente.getNombreCompleto().trim() + ".txt";
-        File archivo = new File(nombreArchivo);
-        int j = 2;
+        File carpeta = carpetaCliente();
 
-        while(archivo.exists()) {
-            String nombreNuevo = "Pedido de "+cliente.getNombreCompleto().trim()+" No. "+j+".txt";
-            archivo = new File(nombreNuevo);
-            j++;     
+        if (!carpeta.exists() && !carpeta.mkdirs()) {
+            System.out.println("No se pudo crear la carpeta de pedidos");
+            return;
         }
+
+        int numero = 1;
+        File archivo;
+
+        do {
+            archivo = new File( carpeta, "pedido_" + numero +".txt");
+            numero++;
+        } while (archivo.exists());
 
         try {
             FileWriter escritor = new FileWriter(archivo);
@@ -134,83 +192,50 @@ public class Pedido {
         
     }
 
-    public void imprimirTicket (){ 
-        ArrayList<String> listaNombres = new ArrayList<>(); 
-        Scanner lector =new Scanner(System.in);
-        boolean validador; 
-        try{
-            File comprobacion = new File("Pedido de "+cliente.getNombreCompleto().trim()+ ".txt");
-            if(!comprobacion.exists()){
-                System.out.println("No se pueden rescatar los pedidos por el momento");
-            }else{
-                String temp = "Pedido de "+cliente.getNombreCompleto().trim()+" No. 1.txt";
-                listaNombres.add(temp); 
-                for (int i= 2; i<=15; i++){
-                    File comprobacion2 = new File("Pedido de "+cliente.getNombreCompleto().trim()+" No. "+i+".txt");
-                    if(!comprobacion2.exists()){
-                        break;
-                    }
-                    else{
-                        temp = "Pedido de "+cliente.getNombreCompleto().trim()+" No. "+i+".txt";
-                        listaNombres.add(temp); 
-                    }
-                }
-                //Se imprimen los nombres de los pedidos. 
-                for (int j=0; j<listaNombres.size(); j++){
-                    int m =j+1;
-                    System.out.println("Pedido de "+cliente.getNombreCompleto().trim()+" No. "+m+".txt");
-                }
-                System.out.println("");
-                
-                do{
-                    System.out.println("_______________________________________________________");
-                    System.out.println("Ingrese el número del pedido que desea recuperar");
-                    validador = lector.hasNextInt();
-                    if(validador == false){
-                        System.out.println("No se ha detectado ningun numero");
-                        System.out.println("Vuélvalo a intentar");
-                        lector.nextLine(); 
-                        System.out.println("-----");
+    public void imprimirTicket () {
+        File[] archivos = obtenerPedidos();
 
-                    }else{
-                        
-                        int num = lector.nextInt(); 
-                        lector.nextLine(); 
-                        if(num<1 || num>listaNombres.size()){ //CAso de error
-                            validador = false; 
-                            System.out.println("El numero que ha sido ingresado no se encuentra deentro del intervalo de pedidos");
-                            System.out.println("Intentelo otra vez....");
-                            System.out.println("");
-                        }else{
-                            //Se imprimen los pedidos 
-                            System.out.println("Pedido encontrado");
-                            System.out.println("Mostrando en pantalla: ");
-                            if(num==1){
-                               this.imprimirPedido("Pedido de "+cliente.getNombreCompleto().trim()+ ".txt");
-                            }
-                            else{
-                                  
-                                this.imprimirPedido("Pedido de "+cliente.getNombreCompleto().trim()+" No. "+num+".txt");
-                                System.out.println("");
-                            }
-                            break; 
-                        }
-                        
-                    }
-                        
-                }while(validador == false);
-                System.out.println("______________________________________________________________________________");
-           }
-            
-        }catch (Exception e) {
-            System.out.println("No se pueeden acceder a los pedidos por el momento");      
-        }   
+        if (archivos.length == 0) {
+            System.out.println("No hay pedidos registrados");
+            return;
+        }
+
+        System.out.println("Pedidos disponibles:");
+
+        for (int i = 0; i < archivos.length; i++) {
+            System.out.println((i +1) + ". " + archivos[i].getName());
+        }
+
+        Scanner lector = new Scanner(System.in);
+        int opcion;
+
+        while (true) { 
+            System.out.print("Seleccione un pedido: ");
+
+            try {
+                opcion = Integer.parseInt( lector.nextLine().trim());
+                
+                if (opcion >= 1 && opcion <= archivos.length) {
+                    break;
+                }
+
+            } catch (NumberFormatException e) { 
+                
+            }
+
+            System.out.println("Opción inválida");
+        }
+
+        File seleccionado = archivos[opcion - 1];
+
+        imprimirPedido(seleccionado.getPath());
+        reimprimirPedido(seleccionado);
     }
 
     
-     public void imprimirPedido(String nombreArchivo){
-         //Se valida que exista un archivo de pedido
-         try {   
+    public void imprimirPedido(String nombreArchivo) {
+        //Se valida que exista un archivo de pedido
+        try {   
             File vacio = new File(nombreArchivo);
             if(!vacio.exists()){
                 System.out.println("El pedido no se encuentra disponible por el momento");
@@ -232,6 +257,27 @@ public class Pedido {
             System.out.println("Error al imprimir el ticket");
         }
     }
+
+    private void reimprimirPedido(File original) {
+        File carpeta = new File( carpetaCliente(), "reimpresiones");
+
+        if (!carpeta.exists() && !carpeta.mkdirs()) {
+            System.out.println("No se pudo crear la carpeta de reimpresiones");
+            return;
+        }
+
+        File copia = new File( carpeta,"reimpresion_" + original.getName());
+
+        try {
+            Files.copy(original.toPath(),copia.toPath(),StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("Ticket generado: " + copia.getPath());
+
+        } catch (IOException e) {
+            System.out.println("No sse puedo reimprimir el ticket");
+        }
+    }
+    
     public Cliente getCliente() {
         return cliente;
     }

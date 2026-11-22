@@ -36,7 +36,7 @@ public class Principal {
                     usuario = gestor.ingresar(nombre);
 
                     if (usuario != null) {
-                        System.out.println("\nBienvienido " + usuario.getNombreCompleto());
+                        System.out.println("\nBienvienid@ " + usuario.getNombreCompleto());
 
                         if (usuario.getRol() == Usuario.Rol.ADMINISTRADOR) {
                             menuAdministrador();

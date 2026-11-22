@@ -42,8 +42,10 @@ public class GestorUsuarios {
     }
 
     public void cargarDatosIniciales() {
-        registrarAdministradorInterno("admin", "Administrador de prueba");
+        registrarAdministradorInterno("admin", "Lilia Abundez");
         registrarCliente("cliente1", "Cliente de prueba");
+        registrarAdministradorInterno("admin2", "María Morán");
+        registrarAdministradorInterno("admin3", "Emiliano Carbajal" );
     }
 
     private boolean registrarAdministradorInterno(String nombreUsuario, String nombreCompleto) {

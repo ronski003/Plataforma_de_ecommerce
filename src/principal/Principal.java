@@ -175,7 +175,7 @@ public class Principal {
         System.out.println("2. PayPal");
         System.out.print("Indique el medio de pago: ");
         int opcion = validacion();
-        int nip = 0;
+        String nip = "";
 
         switch (opcion) {
             case 1:
@@ -192,23 +192,15 @@ public class Principal {
                         System.out.println("Número de tarjeta inválido. Inténtelo de nuevo.");
                     }
                 } while (!numero.matches("\\d{16}"));
+
                 do {
-                    try {
-                        System.out.print("NIP: ");
-                        nip = lector.nextInt();
-                        lector.nextLine();
-                        if (nip < 0) {
-                            System.out.println("Intente nuevamente");
-                        } else if (String.valueOf(nip).length() != 4) {
-                            System.out.println("El NIP debe contener cuatro dígitos");
-                        } else {
-                            correcto = true;
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Intente nuevamente");
-                        lector.nextLine();
+                    System.out.print("NIP (4 dígitos):");
+                    nip = lector.nextLine().trim();
+
+                    if (!nip.matches("\\d{4}")) {
+                        System.out.println("El NIP debe contener exactamente 4 dígitos");
                     }
-                } while (!correcto);
+                } while (!nip.matches("\\d{4}"));
 
                 TarjetaCredito tarjeta = new TarjetaCredito(alias, numero, nip);
                 cliente.agregarMedioPago(tarjeta);

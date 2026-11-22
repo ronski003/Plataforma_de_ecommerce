@@ -48,7 +48,7 @@ public class TarjetaCredito extends MedioPago {
             System.out.print("Seleccione el método de pago: ");
 
             try {
-                opcion = Integer.parseInt(lector.nxtLine().trim());
+                opcion = Integer.parseInt(lector.nextLine().trim());
                 
                 if (opcion == 1 || opcion == 2) {
                     break;
